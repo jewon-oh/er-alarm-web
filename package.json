@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "amqplib": "^0.10.5",
+    "axios": "^1.8.4",
     "dotenv": "^16.4.7",
     "firebase": "^11.6.0",
     "next": "15.1.7",

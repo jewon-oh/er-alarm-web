@@ -4,6 +4,7 @@ import {useEffect, useState} from "react";
 import { getMessaging, getToken, onMessage,isSupported } from "firebase/messaging";
 import { firebaseApp } from "@/lib/firebase";
 import { useToast } from "@/contexts/ToastContext";
+import {axiosInstance} from "@/hooks/axiosInstance";
 
 const vapidKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
 export default function FCMListener() {
@@ -37,6 +38,12 @@ export default function FCMListener() {
                 setToken(currentToken); // ✅ 상태에 저장
                 console.log("✅ FCM 토큰:", currentToken);
 
+                const token = {token: currentToken};
+                await axiosInstance.post("/api/tokens", token).catch(err => {
+                    console.error("axios 에러:", err);
+                    setError("❌ 서버 전송 실패: " + err.message);
+                });
+
                 onMessage(messaging, (payload) => {
                     const title = payload.notification?.title || "📢 새 알림";
                     const body = payload.notification?.body || "";
@@ -44,11 +51,13 @@ export default function FCMListener() {
                 });
             } catch (err) {
                 console.error("FCM 설정 중 오류:", err);
-                setError("⚠️ FCM 설정 중 오류가 발생했습니다.");
+                // setError("⚠️ FCM 설정 중 오류가 발생했습니다."+err);
             }
         };
 
         setupFCM();
+    }, []);
+    useEffect(() => {
     }, [showToast]);
 
     return (
