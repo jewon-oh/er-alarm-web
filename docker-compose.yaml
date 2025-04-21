@@ -1,8 +1,7 @@
 services:
   er-alarm-frontend:
     container_name: er-alarm-frontend
-    build:
-      context: ./frontend
+    image: ghcr.io/jewon-oh/er-alarm-web:dev
     ports:
       - "3000:3000"
     environment:
