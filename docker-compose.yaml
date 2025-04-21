@@ -1,0 +1,12 @@
+services:
+  er-alarm-frontend:
+    container_name: er-alarm-frontend
+    build:
+      context: ./frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - TZ=Asia/Seoul
+    depends_on:
+      - er-alarm-backend
