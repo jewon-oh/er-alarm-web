@@ -45,7 +45,8 @@ export default function EarningsCalendar() {
             queryFn: () => fetchEarnings("", 0, 20, fcmToken, selectedDate),
             staleTime: 5 * 60 * 1000,
             gcTime: 30 * 60 * 1000,
-            placeholderData: keepPreviousData
+            placeholderData: keepPreviousData,
+            enabled: Boolean(fcmToken),
         }
     );
 
@@ -115,8 +116,6 @@ export default function EarningsCalendar() {
                     <EarningsCard
                         key={`ec-${item.id}`}
                         earnings={item}
-                        onClick={() => router.push(`/stocks/${item.symbol}`)}
-                        className="hover:cursor-pointer"
                         config={{
                             showDate: false,
                             showSymbol: true,
