@@ -1,4 +1,4 @@
-'use client';
+
 
 import React, {createContext, useContext, useState, ReactNode} from "react";
 
@@ -42,7 +42,7 @@ export const ToastProvider = ({children}: { children: ReactNode }) => {
                 {toasts.map((toast) => (
                     <div
                         key={toast.id}
-                        className="bg-yellow-500 text-white px-4 py-2 rounded-lg shadow-lg animate-fade-in pointer-events-auto"
+                        className="bg-yellow-500 text-black px-4 py-2 rounded-lg shadow-lg animate-fade-in pointer-events-auto"
                     >
                         {toast.message}
                     </div>
