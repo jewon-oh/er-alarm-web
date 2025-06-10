@@ -11,7 +11,6 @@ import {cn} from "@/lib/utils";
 import {format} from "date-fns";
 import {ko} from "date-fns/locale/ko";
 import {useMemo, useState} from "react";
-import {SelectSingleEventHandler} from "react-day-picker";
 import {keepPreviousData, useQuery} from "@tanstack/react-query";
 import {fetchEarnings} from "@/components/earnings/fetchEarnings";
 import {useFcmToken} from "@/contexts/fcm-context";
@@ -27,7 +26,7 @@ export default function EarningsCalendar() {
 
     const {fcmToken} = useFcmToken();
 
-    const onSelect: SelectSingleEventHandler = (day) => {
+    const onSelect = (day:Date|undefined) => {
         if (!day) return;
         console.log(day);
         setDate(day);
@@ -96,7 +95,7 @@ export default function EarningsCalendar() {
                             <Calendar
                                 mode="single"
                                 selected={date}
-                                onSelect={onSelect}
+                                onSelect={(date)=>{onSelect(date)}}
                                 disabled={(d) => d < new Date("1900-01-01")}
                                 initialFocus
                             />

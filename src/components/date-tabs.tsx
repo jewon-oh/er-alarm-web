@@ -2,11 +2,10 @@ import {Tabs, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import {format, addDays, startOfWeek} from "date-fns";
 import {useRouter} from "next/router";
 import {ko} from "date-fns/locale/ko";
-import {SelectSingleEventHandler} from "react-day-picker";
 
 export function DateTabs({date, onSelect}: {
     date: Date,
-    onSelect: SelectSingleEventHandler
+    onSelect: (date: Date) => void,
     className?: string,
 }) {
     const router = useRouter();

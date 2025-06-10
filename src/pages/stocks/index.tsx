@@ -1,7 +1,7 @@
 import {axiosInstance} from "@/constants/axios-instance";
 
 import {DataTable} from "@/components/data-table";
-import {columns} from "@/pages/stocks/coulmns";
+import {columns} from "@/components/stocks/columns";
 import {StockRow} from "@/types/stock-row";
 import {Stock} from "@/types/stock";
 import {keepPreviousData, useQuery} from "@tanstack/react-query";
