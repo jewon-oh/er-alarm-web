@@ -11,6 +11,9 @@ import {cn} from "@/lib/utils";
 import {StockInfo} from "@/components/stocks/stock-info";
 import {fetchStock} from "@/components/stocks/fetchStock";
 import {Stock} from "@/types/stock";
+import {useRouter} from "next/router";
+import {format} from "date-fns";
+import {ko} from "date-fns/locale/ko";
 
 export interface EarningsCardProps extends React.ComponentPropsWithoutRef<typeof Card> {
     earnings: Earnings,
@@ -25,8 +28,12 @@ export interface EarningsCardProps extends React.ComponentPropsWithoutRef<typeof
 
 export const EarningsCard = React.forwardRef<HTMLDivElement, EarningsCardProps>(
     ({earnings, config, className, ...props}, ref) => {
-        const qc = useQueryClient()
-        const {fcmToken} = useFcmToken()
+        const qc = useQueryClient();
+        const {fcmToken} = useFcmToken();
+        const router = useRouter();
+        const selectedDate = Array.isArray(router.query.date)
+            ? router.query.date[0]
+            : router.query.date ?? format(new Date(), "yyyy-MM-dd", {locale: ko});
 
         // --- 2) useMutation: 구독 & 구독 취소 ---
         const subscribeMutation = useMutation(
@@ -35,6 +42,7 @@ export const EarningsCard = React.forwardRef<HTMLDivElement, EarningsCardProps>(
                     axiosInstance.post(`/api/earnings/${symbol}/subscribe`, {fcmToken, earningsId: id}),
                 onSuccess: () => {
                     qc.invalidateQueries({queryKey: ["earnings", earnings.symbol, 0, 10, fcmToken]})
+                    qc.invalidateQueries({queryKey: ["earningsCalendar", selectedDate]})
                 },
             }
         )
@@ -45,6 +53,7 @@ export const EarningsCard = React.forwardRef<HTMLDivElement, EarningsCardProps>(
                     axiosInstance.put(`/api/earnings/${symbol}/unsubscribe`, {fcmToken, earningsId: id}),
                 onSuccess: () => {
                     qc.invalidateQueries({queryKey: ["earnings", earnings.symbol, 0, 10, fcmToken]})
+                    qc.invalidateQueries({queryKey: ["earningsCalendar", selectedDate]})
                 },
             }
         )
@@ -89,7 +98,12 @@ export const EarningsCard = React.forwardRef<HTMLDivElement, EarningsCardProps>(
                     {...props}
                 >
                     <CardHeader>
-                        {config.showSymbol && <StockInfo symbol={earnings.symbol} stock={data ?? {symbol: earnings.symbol} as Stock}/>}
+                        {config.showSymbol &&
+                            <StockInfo
+                                className="hover:cursor-pointer"
+                                onClick={() => router.push(`/stocks/${earnings.symbol}`)}
+                                symbol={earnings.symbol}
+                                stock={data ?? {symbol: earnings.symbol} as Stock}/>}
                         <CardTitle className="flex justify-between items-center text-4xl font-bold">
 
                             {config.showDate && (

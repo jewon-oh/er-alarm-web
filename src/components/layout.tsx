@@ -26,7 +26,6 @@ export default function Layout({children}: { children: ReactNode }) {
     const router = useRouter();
     const fullPath = router.asPath;
     const pathList: string[] = fullPath.split("/").filter(value => value !== "");
-    console.log(pathList)
     // 배열에 Breadcrumb 요소들 채우기
     const crumbs: ReactNode[] = []
 
